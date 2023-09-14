@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>PokeRPS</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    @import url('https://fonts.cdnfonts.com/css/pokemon-solid');
+
+    .center-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 80%;
+      height: 200px;
+      margin: 0 auto;
+      text-align: center;
+      font-size: 12px;
+      color: black;
+      font-family: 'Pokemon Solid', san-serif;
+    }
+  </style>
+</head>
+
+<body style="background-image: url('background.png'); background-repeat: no-repeat; background-size: cover;">
+  <audio id="myAudio" loop autoplay>
+  <source src="sound2.mp3" type="audio/mpeg">
+  </audio>
+
+  <center>
+    <div>
+      <img src="logo.png" alt="Example Image">
+    </div>
+    <button
+      style="flex: 1; margin-right: 10px; border: 4px solid black;border-radius: 5px;font-family: 'Pokemon Solid', sans-serif;background-color: #ffcb05;"
+      ;id="start_game" onclick="change_to_game_page()"> Start Game
+
+    </button>
+  </center>
+
+  <div class="center-box" style="margin-top: 50px;">
+    <ol>
+      <li>Select the super-effective move</li>
+      <li>Forget about abilities</li>
+      <li>Try to get as much right as possible</li>
+    </ol>
+  </div>
+
+  <script>
+
+    function change_to_game_page() {
+      window.location.href = "game.html";
+      score = 0;
+      sessionStorage.setItem("score", score);
+    }
+
+
+    var myAudio = document.getElementById("myAudio");
+
+window.addEventListener("focus", function() {
+  myAudio.play();
+});
+
+window.addEventListener("blur", function() {
+  myAudio.pause();
+});
+
+  </script>
+
+<audio id="myAudio" loop autoplay>
+
+  <source src="sound2.mp3" type="audio/mpeg">
+
+</audio>
+
+</body>
+
+
+
+
+</html>

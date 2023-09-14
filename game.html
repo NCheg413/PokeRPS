@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>My Site</title>
+
+    <style>
+      @import url("https://fonts.cdnfonts.com/css/pokemon-solid");
+    </style>
+  </head>
+
+  <body style="background-image: url('background.png'); background-repeat: no-repeat; background-size: cover;">
+    <audio id="myAudio" loop autoplay>
+      <source src="sound.mp3" type="audio/mpeg">
+      </audio>
+    <div id="pokemon-info">
+      <!-- <h2>Loading...</h2> -->
+    </div>
+
+    <center>
+      <h2 id="timer">60</h2>
+      <script>
+        var i = 60;
+        (function timer() {
+          if (--i < 0) {
+            window.location.href = "end_screen.html";
+            return;
+          }
+          setTimeout(function () {
+            document.getElementById("timer").innerHTML = i;
+            timer();
+          }, 1000);
+        })();
+      </script>
+    </center>
+
+    <div style="display: flex">
+      <button
+        style="
+          flex: 1;
+          margin-right: 10px;
+          border: 4px solid black;
+          font-family: 'Pokemon Solid', sans-serif;
+          background-color: #ffcb05;
+        "
+        ;
+        id="button1"
+        ;
+        onclick="onButtonClick(this.id)"
+        ;
+      >
+        Button 1
+      </button>
+      <button
+        style="
+          flex: 1;
+          margin-right: 10px;
+          border: 4px solid black;
+          font-family: 'Pokemon Solid', sans-serif;
+          background-color: #ffcb05;
+        "
+        ;
+        id="button2"
+        ;
+        onclick="onButtonClick(this.id)"
+        ;
+      >
+        Button 2
+      </button>
+      <button
+        style="
+          flex: 1;
+          margin-right: 10px;
+          border: 4px solid black;
+          font-family: 'Pokemon Solid', sans-serif;
+          background-color: #ffcb05;
+        "
+        ;
+        id="button3"
+        ;
+        onclick="onButtonClick(this.id)"
+        ;
+      >
+        Button 3
+      </button>
+
+    
+    </div>
+
+    <center>
+      <h1 style="font-family: 'Pokemon Solid', sans-serif;" id = "scoreText">Score: 0</h1>
+    </center>
+    <script
+      src="https://replit.com/public/js/replit-badge-v2.js"
+      theme="dark"
+      position="bottom-right"
+    ></script>
+
+    <script>
+      var randWeakButton;
+
+      const pokemonTypes = [
+        "Poison",
+        "Fighting",
+        "Bug",
+        "Dark",
+        "Dragon",
+        "Electric",
+        "Fairy",
+        "Fire",
+        "Flying",
+        "Ghost",
+        "Grass",
+        "Ground",
+        "Ice",
+        "Normal",
+        "Psychic",
+        "Rock",
+        "Steel",
+        "Water",
+      ];
+
+      function setRandomTypes(pokemonId) {
+        //read in entire neutral array
+        var allNeutralArray = [];
+        //read in a random weakness from the weakness array from the json
+        var weakness;
+        //This will be given a value later
+        var neutralArray = [];
+
+        //Reading in json data
+        var data_json = null;
+        fetch("poke_data.json")
+          .then((response) => response.json())
+          .then((data) => {
+            //Reading in data based on pokemonID parameter
+            data_json = data["result"];
+            data_json = data_json[pokemonId];
+
+            allNeutralArray.push(data_json["stat"]["neutral"]);
+
+            const allWeakNessArray = data_json["stat"]["effective"];
+            weakness =
+              allWeakNessArray[
+                Math.floor(Math.random() * allWeakNessArray.length)
+              ];
+            allNeutralArray = allNeutralArray[0];
+            while (true) {
+              idx1 = Math.floor(Math.random() * allNeutralArray.length);
+              idx2 = Math.floor(Math.random() * allNeutralArray.length);
+              console.log(allNeutralArray[idx1]);
+              console.log(allNeutralArray[idx2]);
+              if (allNeutralArray[idx1] != allNeutralArray[idx2]) {
+                neutralArray.push(allNeutralArray[idx1]);
+                neutralArray.push(allNeutralArray[idx2]);
+                break;
+              }
+            }
+
+            //Assigns the random buttons and the weekness and neutrals
+            randWeakButton = "button" + Math.floor(Math.random() * 3 + 1);
+
+            const button1 = document.querySelector("#button1");
+            const button2 = document.querySelector("#button2");
+            const button3 = document.querySelector("#button3");
+
+            if (randWeakButton === "button1") {
+              button1.textContent = weakness;
+              button2.textContent = neutralArray[0];
+              button3.textContent = neutralArray[1];
+            } else if (randWeakButton === "button2") {
+              button1.textContent = neutralArray[0];
+              button2.textContent = weakness;
+              button3.textContent = neutralArray[1];
+            } else if (randWeakButton === "button3") {
+              button1.textContent = neutralArray[0];
+              button2.textContent = neutralArray[1];
+              button3.textContent = weakness;
+            }
+          })
+          .catch((error) => console.error(error));
+      }
+
+      function rerollPage() {
+        const pokemonInfo = document.getElementById("pokemon-info");
+
+        // Generate a random Pokemon ID between 1 and 898
+        const pokemonId = Math.floor(Math.random() * 898) + 1;
+
+        setRandomTypes(pokemonId);
+
+        var data_json = null;
+
+        fetch("poke_data.json")
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            data_json = data["result"];
+            data_json = data_json[pokemonId];
+            pokemonInfo.innerHTML = `
+            <img style="display: block; margin: 0 auto;" width = "250" height = "250" src="${data_json["imgurl"]}" alt="${data_json["name"]}">`;
+          })
+          .catch((error) => console.error(error));
+      }
+
+      function increment() {
+        scoreInt = parseInt(sessionStorage.getItem("score"));
+        scoreInt++;
+        sessionStorage.setItem("score", scoreInt);
+        document.getElementById("scoreText").innerHTML = "Score: " + scoreInt;
+
+      }
+
+      function correctButton(clicked_id) {
+        if (clicked_id === randWeakButton) {
+          return true;
+        }
+
+        return false;
+      }
+
+      function onButtonClick(clicked_id) {
+        if (correctButton(clicked_id)) {
+          increment();
+          rerollPage();
+        } else {
+          window.location.href = "end_screen.html";
+        }
+      }
+
+      var myAudio = document.getElementById("myAudio");
+
+window.addEventListener("focus", function() {
+  myAudio.play();
+});
+
+window.addEventListener("blur", function() {
+  myAudio.pause();
+});
+
+      rerollPage();
+    </script>
+  </body>
+</html>

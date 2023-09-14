@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    @import url('https://fonts.cdnfonts.com/css/pokemon-solid');
+  </style>
+</head>
+
+<body style="background-image: url('background.png'); background-repeat: no-repeat; background-size: cover;">
+  <audio id="myAudio" loop autoplay>
+  <source src="sound2.mp3" type="audio/mpeg">
+  </audio>
+
+  <center>
+    <h1 style="font-family: 'Pokemon Solid', sans-serif;">GAME OVER!</h1>
+<br>
+
+     <h1 style="font-family: 'Pokemon Solid', sans-serif;">Score: <span id="score"></span></h1>
+    
+
+    <button style="background-color:#ffcb05;flex: 1; margin-right: 10px; border: 4px solid black;font-family: 'Pokemon Solid', sans-serif;" ;
+      id="retry" onclick="change_to_start_page()"> Play Again?
+    </button>
+
+  </center>
+
+  <script>
+    var score = sessionStorage.getItem("score");
+    document.getElementById("score").innerHTML = score;
+    
+    function change_to_start_page() {
+      
+      window.location.href = "index.html";
+    
+    }
+
+
+    var myAudio = document.getElementById("myAudio");
+
+window.addEventListener("focus", function() {
+  myAudio.play();
+});
+
+window.addEventListener("blur", function() {
+  myAudio.pause();
+});
+
+  </script>
+
+</body>
+
+</html>
